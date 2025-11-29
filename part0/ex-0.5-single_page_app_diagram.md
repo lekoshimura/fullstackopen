@@ -4,9 +4,6 @@ Create a diagram depicting the situation where the user goes to the [single-page
 
 ```mermaid
 ---
-config:
-  theme: redux-color
-  look: classic
 title: '0.5: Single Page App Diagram'
 ---
 sequenceDiagram
@@ -14,13 +11,22 @@ sequenceDiagram
   participant browser
   participant server
 
-  User ->> browser: type and<br />submit a note
-  browser ->> browser: form.onsubmit()
+  User ->> browser: Goes to /exampleapp/spa
   activate browser
-  browser ->> browser: notes.push()
+  
+  browser ->> server: GET /exampleapp/spa
+  server -->> browser: Status Code 200 OK
+
+  browser ->> server: GET /exampleapp/main.css
+  server -->> browser: Status Code 200 OK
+
+  browser ->> server: GET /exampleapp/spa.js
+  server -->> browser: Status Code 200 OK
+
+  browser ->> server: GET /exampleapp/data.json
+  server -->> browser: Status Code 200 OK
+  
   browser ->> browser: redrawNotes()
-  browser ->> browser: sendToServer()
-  browser ->> server: POST /exampleapp/new_note_spa
-  server -->> browser: Status Code 201 Created
+  
   deactivate browser
 ```
