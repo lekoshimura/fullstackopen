@@ -53,7 +53,7 @@ sequenceDiagram
   participant browser
   participant server
 
-  User ->> browser: submit a note
+  User ->> browser: type and submit a note
   browser ->> server: POST https://studies.cs.helsinki.fi/exampleapp/new_note
   activate server
   server -->> browser: (Status 302)
