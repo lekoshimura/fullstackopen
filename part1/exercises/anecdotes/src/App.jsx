@@ -2,30 +2,38 @@ import { useState } from "react";
 
 const VotesCount = (props) => {
   const { votes } = props;
-  return votes ? (
-    <p className="italic text-gray-500 text-sm">- has {votes} votes</p>
+
+  if (votes === 0)
+    return (
+      <p className="italic text-gray-500 text-sm">- has not been votes yet</p>
+    );
+
+  return votes === 1 ? (
+    <p className="italic text-gray-500 text-sm">- has {votes} vote</p>
   ) : (
-    <p className="italic text-gray-500 text-sm">- has not been votes yet</p>
+    <p className="italic text-gray-500 text-sm">- has {votes} votes</p>
   );
 };
 
 const MostVotedAnecdote = (props) => {
   const { anecdotes, votes } = props;
-  const maxVotes = Math.max(...votes);
 
-  if (!maxVotes) return null;
+  const maxVotes = Math.max(...votes);
+  if (maxVotes === 0) return null;
+
+  const anecdotesWithMaxVotes = anecdotes.filter(
+    (_, index) => votes[index] === maxVotes
+  );
+
   return (
     <footer className="w-full border-t border-t-slate-300 bg-slate-200 p-4">
-      <p className="mb-4 font-semibold">Anecdote with most votes:</p>
-      <div className="text-sm text-gray-600 italic">
-        <ul className="list-inside list-disc">
-          {anecdotes.map(
-            (anecdote, index) =>
-              votes[index] === maxVotes && <li key={index}>{anecdote}</li>
-          )}
-        </ul>
-        <VotesCount votes={maxVotes} />
-      </div>
+      <p className="mb-4 font-semibold">Anecdotes with most votes:</p>
+      <ul className="mb-4 list-inside list-disc text-sm text-gray-600 italic">
+        {anecdotesWithMaxVotes.map((anecdote, index) => (
+          <li key={index}>{anecdote}</li>
+        ))}
+      </ul>
+      <VotesCount votes={maxVotes} />
     </footer>
   );
 };
