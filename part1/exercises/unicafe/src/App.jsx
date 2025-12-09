@@ -13,19 +13,23 @@ const Statistics = (props) => {
     return total ? (good / total).toFixed(2) : 0;
   };
 
-  return (
-    <div>
-      <h1>Statistics</h1>
-      <ul>
-        <li>good: {good}</li>
-        <li>neutral: {neutral}</li>
-        <li>bad: {bad}</li>
-        <li>all: {total}</li>
-        <li>average: {updateAverage()}</li>
-        <li>positive: {updatePositive()} %</li>
-      </ul>
-    </div>
-  );
+  if (total) {
+    return (
+      <div>
+        <h1>Statistics</h1>
+        <ul>
+          <li>good: {good}</li>
+          <li>neutral: {neutral}</li>
+          <li>bad: {bad}</li>
+          <li>all: {total}</li>
+          <li>average: {updateAverage()}</li>
+          <li>positive: {updatePositive()} %</li>
+        </ul>
+      </div>
+    );
+  } else {
+    return <div><p>No feedback given.</p></div>;
+  }
 };
 
 export const App = () => {
