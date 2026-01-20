@@ -19,11 +19,11 @@ const Content = (props) => {
 };
 
 const Total = (props) => {
-  let total =
-    props.parts[0].exercises +
-    props.parts[1].exercises +
-    props.parts[2].exercises +
-    props.parts[3].exercises;
+  const initialValue = 0;
+  let total = props.parts.reduce(
+    (accumulator, currentValue) => accumulator + currentValue.exercises,
+    initialValue,
+  );
   return (
     <p>
       <strong>total of {total} exercises</strong>
