@@ -65,7 +65,7 @@ Go to <http://localhost:5173/>.
 
 ### Component
 
-A minimal React component:
+A minimal React component using arrow function syntax:
 
 ```jsx
 const App = () => (
@@ -75,6 +75,8 @@ const App = () => (
 );
 export default App;
 ```
+
+This is an **arrow function** declaration. The component `App` is defined as a constant that holds an arrow function. The parentheses around the JSX indicate an implicit return - the function returns the JSX element without needing an explicit `return` statement.
 
 ### JSX
 
@@ -170,7 +172,7 @@ Although array `t` is defined using `const`, its contents can still be modified 
 ```js
 const t = [1, -1, 3];
 t.push(5);
-t.forEach((value) => console.log(value));
+t.forEach(value => console.log(value));
 // 1, -1, 3 and 5 are printed
 ```
 
