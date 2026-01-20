@@ -1,5 +1,8 @@
-import Course from "./Course";
+# 2.4: Course information step 9
 
+Let's extend our application to allow for an arbitrary number of courses:
+
+```jsx
 const App = () => {
   const courses = [
     {
@@ -48,11 +51,10 @@ const App = () => {
 
   return (
     <div>
-      {courses.map((course) => (
-        <Course key={course.id} course={course} />
-      ))}
+      {courses.map((course) => {
+        <Course course={course} />;
+      })}
     </div>
   );
 };
-
-export default App;
+```
