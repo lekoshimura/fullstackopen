@@ -22,7 +22,6 @@ You can use the code below as a starting point for the App.jsx file:
 
 ```jsx
 import { useState } from 'react'
-
 const App = () => {
   // save clicks of each button to its own state
   const [good, setGood] = useState(0)
@@ -35,6 +34,16 @@ const App = () => {
     </div>
   )
 }
-
 export default App
+```
+
+In above code, three state variables are defined for storing the number of received feedback for each category. The initial value for each variable is set to zero.
+
+- `good` is the variable that stores the number of good feedback received.
+- `setGood` is the function that is used for updating the value of the `good` variable.
+
+So, to increase the value of `good` by one, you would call the function `setGood` like this: 
+
+```jsx
+setGood(good + 1)
 ```
