@@ -1,5 +1,49 @@
 import { useState } from "react";
 
+const Filter = (props) => {
+  return (
+    <div>
+      <h2>Filter shown with:</h2>
+      <input
+        type="text"
+        value={props.filter}
+        onChange={props.onFilterInputChange}
+      />
+    </div>
+  );
+};
+
+const PersonForm = (props) => {
+  return (
+    <form onSubmit={props.onSubmitForm}>
+      <div>
+        <span style={{ width: "100px", display: "inline-block" }}>name:</span>
+        <input value={props.newName} onChange={props.onNameInputChange} />
+      </div>
+      <div>
+        <span style={{ width: "100px", display: "inline-block" }}>number:</span>
+        <input value={props.newNumber} onChange={props.onNumberChange} />
+      </div>
+      <div>
+        <span style={{ width: "100px", display: "inline-block" }}>&nbsp;</span>
+        <button type="submit">add</button>
+      </div>
+    </form>
+  );
+};
+
+const Persons = (props) => {
+  return (
+    <ul>
+      {props.filteredPersons.map((person) => (
+        <li key={person.id}>
+          {person.name}: {person.number}
+        </li>
+      ))}
+    </ul>
+  );
+};
+
 const App = () => {
   const [persons, setPersons] = useState([
     { name: "Arto Hellas", number: "040-123456", id: 1 },
@@ -60,37 +104,19 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
-      <div>
-        <h2>Filter shown with:</h2>
-        <input type="text" value={filter} onChange={onFilterInputChange} />
-      </div>
-      <form onSubmit={onSubmitForm}>
-        <h2>Add new</h2>
-        <div>
-          <span style={{ width: "100px", display: "inline-block" }}>name:</span>
-          <input value={newName} onChange={onNameInputChange} />
-        </div>
-        <div>
-          <span style={{ width: "100px", display: "inline-block" }}>
-            number:
-          </span>
-          <input value={newNumber} onChange={onNumberChange} />
-        </div>
-        <div>
-          <span style={{ width: "100px", display: "inline-block" }}>
-            &nbsp;
-          </span>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <Filter filter={filter} onFilterInputChange={onFilterInputChange} />
+
+      <h2>Add new</h2>
+      <PersonForm
+        newName={newName}
+        onNameInputChange={onNameInputChange}
+        newNumber={newNumber}
+        onNumberChange={onNumberChange}
+        onSubmitForm={onSubmitForm}
+      />
+
       <h2>Numbers</h2>
-      <ul>
-        {filteredPersons.map((person) => (
-          <li key={person.id}>
-            {person.name}: {person.number}
-          </li>
-        ))}
-      </ul>
+      <Persons filteredPersons={filteredPersons} />
     </div>
   );
 };
