@@ -53,6 +53,16 @@ $ npm create vite@latest
   npm run dev
 ```
 
+For the purpose of this course, we will clean up the project a bit. Remove the following files and folders:
+
+```bash
+$ rm ./README.md
+$ rm ./src/App.css
+$ rm ./src/assets/
+$ rm ./src/index.css
+$ rm ./public/
+```
+
 Let's configure the project manually for learning purposes:
 
 ```bash
@@ -99,7 +109,7 @@ const App = () =>
   React.createElement(
     "div",
     null,
-    React.createElement("p", null, "Hello world")
+    React.createElement("p", null, "Hello world"),
   );
 ```
 
@@ -172,7 +182,7 @@ Although array `t` is defined using `const`, its contents can still be modified 
 ```js
 const t = [1, -1, 3];
 t.push(5);
-t.forEach(value => console.log(value));
+t.forEach((value) => console.log(value));
 // 1, -1, 3 and 5 are printed
 ```
 

@@ -90,25 +90,21 @@ console.log(totalAmount);
 The function is an arrow function written in compact form:
 
 ```jsx
-note => note.id
+(note) => note.id;
 ```
 
 The full form would be:
 
 ```jsx
 (note) => {
-  return note.id
-}
+  return note.id;
+};
 ```
 
 In React, we often use `map` to render a collection of items as a list of components.
 
 ```jsx
-notes.map(note =>
-  <li key={note.id}>
-    {note.content}
-  </li>
-)
+notes.map((note) => <li key={note.id}>{note.content}</li>);
 ```
 
 - React requires a special `key` property to be set on each list item. This helps React identify which items have changed.
@@ -120,12 +116,128 @@ The following code is not recommended:
 
 ```jsx
 <ul>
-  {notes.map((note, i) => 
-    <li key={i}>
-      {note.content}
-    </li>
-  )}
+  {notes.map((note, i) => (
+    <li key={i}>{note.content}</li>
+  ))}
 </ul>
 ```
 
 Using array indexes as keys can lead to issues when the list changes, such as when items are added, removed, or reordered. This can cause React to incorrectly associate components with data, leading to unexpected behavior and rendering issues.
+
+## B - Forms
+
+### Saving the notes in the component state
+
+Import the `useState` function and use it to define a piece of state that gets initialized with the initial notes array passed in the props.
+
+```jsx
+import { useState } from "react";
+
+const App = (props) => {
+  const [notes, setNotes] = useState(props.notes);
+  const addNote = (event) => {
+    // Prevent page reload:
+    event.preventDefault();
+
+    // Log the element that triggered the event:
+    console.log("button clicked", event.target);
+  };
+
+  return (
+    <div>
+      <h1>Notes</h1>
+      <ul>
+        {notes.map((note) => (
+          <li key={note.id}>{note.content}</li>
+        ))}
+      </ul>
+      <form onSubmit={addNote}>
+        <input />
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  );
+};
+
+export default App;
+```
+
+### Controlled component
+
+How do we access the data contained in the form's input element?
+
+```jsx
+import { useState } from "react";
+
+const App = (props) => {
+  const [notes, setNotes] = useState(props.notes);
+  const [newNote, setNewNote] = useState("a new note");
+
+  const addNote = (event) => {
+    // 4 . Prevent page reload:
+    event.preventDefault();
+    const noteObject = {
+      content: newNote,
+      important: Math.random() < 0.5,
+      id: String(notes.length + 1),
+    };
+    // 3 . array.concat() creates a new array containing the contents
+    // of the old array and the new element:
+    setNotes(notes.concat(noteObject));
+    setNewNote("");
+  };
+
+  // 2 . We have to register an event handler that synchronizes the
+  // changes made to the input with the component's state. Otherwise,
+  // the input field would be read-only and we'll see a warning in
+  // the console:
+  const handleNewNote = (event) => {
+    setNewNote(event.target.value);
+  };
+
+  return (
+    <div>
+      <h1>Notes</h1>
+      <ul>
+        {notes.map((note) => (
+          <li key={note.id}>{note.content}</li>
+        ))}
+      </ul>
+      <form onSubmit={addNote}>
+        {/* 1 . A piece of the App component's state is assigned as the value
+            attribute of the input element, the App component now controls the
+            behavior of the input element:
+        */}
+        <input value={newNote} onChange={handleNewNote} />
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  );
+};
+
+export default App;
+```
+
+### Filtering Displayed Elements
+
+```jsx
+const App = (props) => {
+  const [showAll, setShowAll] = useState(true);
+  // ...
+  const notesToShow = showAll
+    ? notes
+    : notes.filter((note) => note.important === true);
+  return (
+    // ...
+    <button onClick={() => setShowAll(!showAll)}>
+      show {showAll ? "important" : "all"}
+    </button>
+    // ...
+    notesToShow.map((note) => <li key={note.id}>{note.content}</li>
+  );
+};
+```
+
+See complete example at:
+
+- `part2/examples/notes/`
