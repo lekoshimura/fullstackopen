@@ -10,6 +10,17 @@ const App = () => {
 
   const onSubmitForm = (event) => {
     event.preventDefault();
+
+    // If name already exists, show alert and do not add:
+    const existingPersonIndex = persons.findIndex(
+      (person) => person.name === newName,
+    );
+    if (existingPersonIndex !== -1) {
+      alert(`${newName} is already added to phonebook`);
+      return;
+    }
+
+    // Add new person to phonebook:
     const person = {
       name: newName,
     };
