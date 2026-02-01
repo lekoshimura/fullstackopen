@@ -1,9 +1,26 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
-const App = (props) => {
-  const [notes, setNotes] = useState(props.notes);
+const App = () => {
+  const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState("a new note");
   const [showAll, setShowAll] = useState(true);
+
+  const hook = () => {
+    // 2 . Effect function is executed, data is fetched
+    console.log("effect");
+    axios.get("http://localhost:3001/notes").then((response) => {
+      // 3 . When data is fetched, state is updated, component re-renders
+      console.log("promise fulfilled");
+      setNotes(response.data);
+    });
+  };
+
+  useEffect(hook, []);
+  
+  // 1 . First render, notes: 0 notes
+  // 4 . Second render, notes: 3 notes
+  console.log("render", notes.length, "notes");
 
   const addNote = (event) => {
     event.preventDefault();

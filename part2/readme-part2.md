@@ -241,3 +241,94 @@ const App = (props) => {
 See complete example at:
 
 - `part2/examples/notes/`
+
+## C - Getting data from server
+
+The db.json file was created at the root of the notes project to simulate a backend server. Start the JSON Server with the following command:
+
+```bash
+npx json-server --port 3001 db.json
+```
+
+You can see the data at `http://localhost:3001/notes`. The React code fetches the notes from the server and renders them to the screen. Whenever a new note is added to the application, the React code also sends it to the server to make the new note persist in "memory". In the next lesson, we will see how to make the data persist permanently.
+
+### The browser as a runtime environment
+
+To fetch data in the old way, we would use the `XMLHttpRequest` API.
+
+```js
+const xhttp = new XMLHttpRequest()
+xhttp.onreadystatechange = function() {
+  if (this.readyState == 4 && this.status == 200) {
+    const data = JSON.parse(this.responseText)
+    // handle the response that is saved in variable data
+  }
+}
+xhttp.open('GET', '/data.json', true)
+xhttp.send()
+```
+
+`XMLHttpRequest` (also known as HTTP request) is a technique introduced in 1999. It is no longer recommended to use it, and it has been largely superseded by `fetch`.
+
+Nowadays, we can use the more modern `fetch` API that is built into most browsers.
+
+### npm
+
+#### JSON Server
+
+```bash
+$ npm install json-server --save-dev
+# json-server was installed as a development dependency because it is only needed
+# during development to simulate a backend server.
+```
+
+Add the following script to `package.json` to start the JSON server more easily:
+
+```
+"server": "json-server -p 3001 db.json"
+```
+
+#### Axios
+
+```bash
+$ npm install axios
+# Notice that in `package.json`, a new section `dependencies` has been added:
+# axios is installed as a runtime dependency. There is no --save-dev flag.
+```
+
+Axios returns promises. A promise can have three states:
+
+- pending
+- fulfilled
+- rejected
+
+. When the promise is fulfilled, we can access the data returned by the server.
+
+## Effect-hooks
+
+React 16.8.0 introduced hooks, which allow us to use state and other React features without writing a class:
+
+- useState: allows us to add state to function components.
+- effect-hooks: allows us to perform side effects in function components.
+
+When fetching data from a server, we are performing a side effect. Therefore, we use the `useEffect` hook to fetch data from the server when the component is rendered for the first time.
+
+```jsx
+const hook = () => {
+  console.log('effect')
+  axios
+    .get('http://localhost:3001/notes')
+    .then(response => {
+      console.log('promise fulfilled')
+      setNotes(response.data)
+    })
+}
+
+useEffect(hook, []);
+```
+
+- The first argument to `useEffect` is the function that contains the side-effect logic.
+- The second argument is an array of dependencies. Since we want the effect to run only once, when the component is first rendered, we pass an empty array.
+- If we omit the second argument, the effect will run after every render, which is not what we want when fetching data from a server.
+- The code above is executed only once, after the first render of the component.
+
