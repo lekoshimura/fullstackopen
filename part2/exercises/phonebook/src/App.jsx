@@ -122,6 +122,7 @@ const App = () => {
   };
 
   const onDeleteClick = (person) => {
+    if (confirm(`Delete ${person.name}?`) === false) return;
     const response = personService.remove(person);
     response.then((deletedPerson) => {
       const updatedArray = persons.filter((p) => p.id !== deletedPerson.id);
