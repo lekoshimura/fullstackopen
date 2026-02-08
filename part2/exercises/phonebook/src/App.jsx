@@ -49,11 +49,11 @@ const App = () => {
   // Start local server before running frontend:
   // $ npx json-server --port 3001 persons.json
   const hook = () => {
-    axios.get('http://localhost:3001/persons').then(response => {
-      setPersons(response.data);  
+    axios.get("http://localhost:3001/persons").then((response) => {
+      setPersons(response.data);
       setFilteredPersons(response.data);
-    })
-  }
+    });
+  };
   useEffect(hook, []);
 
   const [persons, setPersons] = useState([]);
@@ -101,10 +101,12 @@ const App = () => {
       name: newName,
       number: newNumber,
     };
-    setPersons(persons.concat(person));
-    setFilteredPersons(persons.concat(person));
-    setNewName("");
-    setNewNumber("");
+    axios.post("http://localhost:3001/persons", person).then((response) => {
+      setPersons(persons.concat(response.data));
+      setFilteredPersons(persons.concat(person));
+      setNewName("");
+      setNewNumber("");
+    });
   };
 
   return (
