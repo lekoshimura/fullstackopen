@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import personService from "./services/persons";
 
 const Filter = (props) => {
   return (
@@ -49,9 +49,9 @@ const App = () => {
   // Start local server before running frontend:
   // $ npx json-server --port 3001 persons.json
   const hook = () => {
-    axios.get("http://localhost:3001/persons").then((response) => {
-      setPersons(response.data);
-      setFilteredPersons(response.data);
+    personService.getAll().then((persons) => {
+      setPersons(persons);
+      setFilteredPersons(persons);
     });
   };
   useEffect(hook, []);
@@ -97,13 +97,12 @@ const App = () => {
 
     // Add new person to phonebook:
     const person = {
-      id: persons.length + 1,
       name: newName,
       number: newNumber,
     };
-    axios.post("http://localhost:3001/persons", person).then((response) => {
-      setPersons(persons.concat(response.data));
-      setFilteredPersons(persons.concat(person));
+    personService.create(person).then((personAdded) => {
+      setPersons(persons.concat(personAdded));
+      setFilteredPersons(persons.concat(personAdded));
       setNewName("");
       setNewNumber("");
     });
