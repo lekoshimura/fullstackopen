@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import personService from "./services/persons";
+import persons from "./services/persons";
 
 const Filter = (props) => {
   return (
@@ -35,10 +36,22 @@ const PersonForm = (props) => {
 
 const Persons = (props) => {
   return (
-    <ul>
+    <ul style={{ listStyleType: "circle", padding: 0 }}>
       {props.filteredPersons.map((person) => (
-        <li key={person.id}>
-          {person.name}: {person.number}
+        <li
+          key={person.id}
+          style={{
+            padding: "0.5rem 0",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            width: "380px",
+          }}
+        >
+          <span>
+            {person.name}: {person.number}
+          </span>
+          <button onClick={() => props.onDeleteClick(person)}>delete</button>
         </li>
       ))}
     </ul>
@@ -108,6 +121,15 @@ const App = () => {
     });
   };
 
+  const onDeleteClick = (person) => {
+    const response = personService.remove(person);
+    response.then((deletedPerson) => {
+      const updatedArray = persons.filter((p) => p.id !== deletedPerson.id);
+      setPersons([...updatedArray]);
+      setFilteredPersons([...updatedArray]);
+    });
+  };
+
   return (
     <div>
       <h1>Phonebook</h1>
@@ -123,7 +145,10 @@ const App = () => {
       />
 
       <h2>Numbers</h2>
-      <Persons filteredPersons={filteredPersons} />
+      <Persons
+        filteredPersons={filteredPersons}
+        onDeleteClick={onDeleteClick}
+      />
     </div>
   );
 };
