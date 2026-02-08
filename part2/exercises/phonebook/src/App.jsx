@@ -99,26 +99,34 @@ const App = () => {
   const onSubmitForm = (event) => {
     event.preventDefault();
 
-    // If name already exists, show alert and do not add:
     const existingPersonIndex = persons.findIndex(
       (person) => person.name === newName,
     );
+    // If name already exists, show alert and ask it user should be updated:
     if (existingPersonIndex !== -1) {
-      alert(`${newName} is already added to phonebook`);
-      return;
+      if (!confirm(`Update ${newName} phone number to ${newNumber}?`)) return;
+      const person = persons[existingPersonIndex];
+      person.number = newNumber;
+      personService.update(person).then((updatedPerson) => {
+        persons.map((p) => {
+          if (p.id === updatedPerson.id) p = { updatedPerson };
+        });
+        setPersons([...persons]);
+        setFilteredPersons([...persons]);
+      });
+    } else {
+      // Add new person to phonebook:
+      const person = {
+        name: newName,
+        number: newNumber,
+      };
+      personService.create(person).then((personAdded) => {
+        setPersons(persons.concat(personAdded));
+        setFilteredPersons(persons.concat(personAdded));
+        setNewName("");
+        setNewNumber("");
+      });
     }
-
-    // Add new person to phonebook:
-    const person = {
-      name: newName,
-      number: newNumber,
-    };
-    personService.create(person).then((personAdded) => {
-      setPersons(persons.concat(personAdded));
-      setFilteredPersons(persons.concat(personAdded));
-      setNewName("");
-      setNewNumber("");
-    });
   };
 
   const onDeleteClick = (person) => {
