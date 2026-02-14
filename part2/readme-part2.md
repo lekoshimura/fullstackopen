@@ -313,6 +313,8 @@ React 16.8.0 introduced hooks, which allow us to use state and other React featu
 
 When fetching data from a server, we are performing a side effect. Therefore, we use the `useEffect` hook to fetch data from the server when the component is rendered for the first time.
 
+⚠️ If you declare fetch data whithout `useEffect`, the data will be fetched every time the component is rendered, which will cause an infinite loop of fetching data and re-rendering the component.
+
 ```jsx
 const App = () => {
   const hook = () => {
@@ -494,3 +496,45 @@ const toggleImportanceOf = (id) => {
     });
 };
 ```
+
+## E - Adding styles to React app
+
+Create a new file `index.css` in the `src` folder. Import the CSS file in `main.jsx` with:
+
+```jsx
+import "./index.css";
+```
+
+In the components, add class names to the elements you want to style. Notice that the class name is added with the `className` attribute, not `class` as in regular HTML.:
+
+```jsx
+<li className="note">
+  {note.content}
+</li>
+```
+
+### Inline styles
+
+Here is an example of how to use inline styles in React:
+
+```jsx
+const Footer = () => {
+  const footerStyle = {
+    color: 'green',
+    fontStyle: 'italic'
+  }
+
+  return (
+    <div style={footerStyle}>
+      <p>
+        Note app, Department of Computer Science, University of Helsinki 2025
+      </p>
+    </div>
+  )
+}
+```
+
+Ways of thinking about styles:
+
+- __Old school way__: people used to consider a good practice to write all styles in a single CSS file. This is not a good practice because it can lead to a large and unmanageable CSS file.
+- __Modern way__: write styles in the same file as the component. This way, the styles are co-located with the component, which makes it easier to maintain and understand the code. This is the approach used by CSS-in-JS libraries like styled-components and emotion.
