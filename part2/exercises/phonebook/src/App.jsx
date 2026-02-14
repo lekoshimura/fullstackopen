@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import Notification from "./Notification";
 import personService from "./services/persons";
-import persons from "./services/persons";
 
 const Filter = (props) => {
   return (
@@ -74,6 +74,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
   const [filteredPersons, setFilteredPersons] = useState(persons);
+  const [message, setMessage] = useState("");
 
   const onNameInputChange = (event) => {
     setNewName(event.target.value);
@@ -113,6 +114,10 @@ const App = () => {
         });
         setPersons([...persons]);
         setFilteredPersons([...persons]);
+        setMessage(`${updatedPerson.name}'s number updated successfully!`);
+        setTimeout(() => {
+          setMessage("");
+        }, 2000);
       });
     } else {
       // Add new person to phonebook:
@@ -125,6 +130,10 @@ const App = () => {
         setFilteredPersons(persons.concat(personAdded));
         setNewName("");
         setNewNumber("");
+        setMessage(`${person.name} was included successfully!`);
+        setTimeout(() => {
+          setMessage("");
+        }, 2000);
       });
     }
   };
@@ -136,6 +145,10 @@ const App = () => {
       const updatedArray = persons.filter((p) => p.id !== deletedPerson.id);
       setPersons([...updatedArray]);
       setFilteredPersons([...updatedArray]);
+      setMessage(`${person.name} was deleted successfully!`);
+      setTimeout(() => {
+        setMessage("");
+      }, 2000);
     });
   };
 
@@ -143,6 +156,8 @@ const App = () => {
     <div>
       <h1>Phonebook</h1>
       <Filter filter={filter} onFilterInputChange={onFilterInputChange} />
+
+      <Notification message={message} />
 
       <h2>Add new</h2>
       <PersonForm
